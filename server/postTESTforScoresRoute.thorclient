@@ -1,0 +1,41 @@
+{
+  "readme": "To open this file inside VSCode, you need to install Thor Client extension https://thorclient.com/",
+  "request": {
+    "url": {
+      "raw": "http://localhost:5000/api/scores",
+      "query": []
+    },
+    "method": "POST",
+    "body": {
+      "mode": "raw",
+      "options": {
+        "raw": {
+          "language": "json"
+        }
+      },
+      "raw": "{\r\n  \"student_id\": 1,\r\n  \"subject_id\": 1,\r\n  \"exam_type\": \"End-Term\",\r\n  \"marks\": 150\r\n}"
+    },
+    "header": [
+      {
+        "key": "Content-Type",
+        "value": "application/json"
+      }
+    ]
+  },
+  "event": {
+    "assert": [
+      {
+        "key": "response.status",
+        "value": "200",
+        "disabled": false,
+        "type": "text",
+        "operator": "=="
+      }
+    ]
+  },
+  "response": {
+    "keys": [
+      "error"
+    ]
+  }
+}
