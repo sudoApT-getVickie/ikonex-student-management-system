@@ -14,17 +14,18 @@ function App() {
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        // Fire requests to our Node.js backend simultaneously
+        // Use Vite's environment variable syntax
+        const API_BASE = import.meta.env.VITE_API_URL;
+
         const [studentsRes, streamsRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/students'),
-          axios.get('http://localhost:5000/api/streams')
+          axios.get(`${API_BASE}/api/students`),
+          axios.get(`${API_BASE}/api/streams`)
         ]);
 
-        // Update the state with the length of the returned arrays
         setMetrics({
           students: studentsRes.data.length,
           streams: streamsRes.data.length,
-          scores: 1024 // We haven't built a GET /api/scores endpoint yet, so we'll mock this one for now!
+          scores: 1024
         });
       } catch (error) {
         console.error("Error fetching metrics:", error);
@@ -38,7 +39,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-brutal-bg text-white font-sans flex">
-      
+
       {/* Sidebar Navigation */}
       <aside className="w-64 border-r border-brutal-border bg-brutal-card hidden md:flex flex-col">
         <div className="p-6 border-b border-brutal-border">
@@ -47,7 +48,7 @@ function App() {
           </h1>
           <p className="text-xs text-gray-400 mt-2 font-mono uppercase tracking-widest">Command Center</p>
         </div>
-        
+
         <nav className="flex-1 p-4 space-y-2 mt-4">
           <a href="#" className="block p-3 rounded-sm bg-brutal-bg border border-brutal-border text-brutal-gold font-bold transition">
             Dashboard
@@ -63,7 +64,7 @@ function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
-        
+
         <header className="h-16 border-b border-brutal-border bg-brutal-card flex items-center px-8 justify-between">
           <h2 className="text-sm font-mono font-bold text-gray-300">
             System Status: <span className="text-green-500 animate-pulse">● ONLINE</span>
@@ -74,7 +75,7 @@ function App() {
         </header>
 
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-          
+
           <div className="mb-8">
             <h2 className="text-3xl font-black tracking-tight">System Overview</h2>
             <p className="text-gray-400 mt-1 font-mono text-sm">Real-time database metrics</p>
@@ -82,21 +83,21 @@ function App() {
 
           {/* Dynamic Data Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
+
             <div className="border border-brutal-border bg-brutal-card p-6">
               <h3 className="text-gray-400 font-mono text-xs mb-2 uppercase tracking-widest">Total Students</h3>
               <p className="text-4xl font-black text-brutal-gold">
                 {isLoading ? "..." : metrics.students}
               </p>
             </div>
-            
+
             <div className="border border-brutal-border bg-brutal-card p-6">
               <h3 className="text-gray-400 font-mono text-xs mb-2 uppercase tracking-widest">Active Streams</h3>
               <p className="text-4xl font-black text-brutal-gold">
                 {isLoading ? "..." : metrics.streams}
               </p>
             </div>
-            
+
             <div className="border border-brutal-border bg-brutal-card p-6 opacity-50">
               <h3 className="text-gray-400 font-mono text-xs mb-2 uppercase tracking-widest">Scores Logged</h3>
               <p className="text-4xl font-black text-brutal-gold">
