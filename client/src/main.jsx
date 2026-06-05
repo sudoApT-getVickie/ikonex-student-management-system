@@ -3,16 +3,18 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App.jsx'
 import Landing from './Landing.jsx'
+import Streams from './Streams.jsx'
+import Students from './Students.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        {/* The new light-themed gateway page */}
         <Route path="/" element={<Landing />} />
-        {/* The existing dark-themed command center */}
         <Route path="/dashboard" element={<App />} />
+        <Route path="/streams" element={<Streams />} />
+        <Route path="/students" element={<Students />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import brandLogo from './assets/logo.svg';
 
 function App() {
-  // 1. Initialize State
   const [metrics, setMetrics] = useState({
     students: 0,
     streams: 0,
@@ -11,11 +11,9 @@ function App() {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  // 2. Fetch Data on Component Mount
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        // Use Vite's environment variable syntax
         const API_BASE = import.meta.env.VITE_API_URL;
 
         const [studentsRes, streamsRes] = await Promise.all([
@@ -39,41 +37,45 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-brutal-bg text-white font-sans flex">
+    // Swapped brutal-bg for a very soft gray to make the white cards pop
+    <div className="min-h-screen bg-gray-50 text-academy-teal font-sans flex">
 
-      {/* Sidebar Navigation */}
-      <aside className="w-64 border-r border-brutal-border bg-brutal-card hidden md:flex flex-col">
-        <div className="p-6 border-b border-brutal-border flex items-center gap-3">
+      {/* Sidebar Navigation: Now pure white with soft borders */}
+      <aside className="w-64 border-r border-gray-200 bg-white hidden md:flex flex-col shadow-sm z-10">
+        <div className="p-6 border-b border-gray-100 flex items-center gap-3">
           <img src={brandLogo} alt="Ikonex Academy Logo" className="w-8 h-8" />
           <div>
-            <h1 className="text-xl font-black tracking-tighter text-brutal-gold font-mono leading-none">
-              IKONEX<span className="text-white">_SMS</span>
+            <h1 className="text-xl font-black tracking-tighter text-academy-teal leading-none">
+              IKONEX<span className="text-academy-teal/50">_SMS</span>
             </h1>
-            <p className="text-[10px] text-gray-400 mt-1 font-mono uppercase tracking-widest">Command Center</p>
+            <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-widest font-bold">Command Center</p>
           </div>
         </div>
 
         <nav className="flex-1 p-4 space-y-2 mt-4">
-          <a href="#" className="block p-3 rounded-sm bg-brutal-bg border border-brutal-border text-brutal-gold font-bold transition">
+          {/* Active Link Styling */}
+          <Link to="/dashboard" className="block p-3 rounded-lg bg-emerald-50 text-emerald-900 border-l-4 border-academy-gold font-bold transition-all">
             Dashboard
-          </a>
-          <a href="#" className="block p-3 rounded-sm text-gray-400 font-medium transition hover:text-white hover:bg-gray-800">
+          </Link>
+          {/* Inactive Link Styling */}
+          <Link to="/streams" className="block p-3 rounded-lg text-gray-500 font-semibold transition-all hover:text-academy-teal hover:bg-gray-50">
             Class Streams
-          </a>
-          <a href="#" className="block p-3 rounded-sm text-gray-400 font-medium transition hover:text-white hover:bg-gray-800">
+          </Link>
+          <Link to="/students" className="block p-3 rounded-lg text-gray-500 font-semibold transition-all hover:text-academy-teal hover:bg-gray-50">
             Students Roster
-          </a>
+          </Link>
         </nav>
       </aside>
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
 
-        <header className="h-16 border-b border-brutal-border bg-brutal-card flex items-center px-8 justify-between">
-          <h2 className="text-sm font-mono font-bold text-gray-300">
-            System Status: <span className="text-green-500 animate-pulse">● ONLINE</span>
+        {/* Top Header */}
+        <header className="h-16 border-b border-gray-200 bg-white flex items-center px-8 justify-between shadow-sm">
+          <h2 className="text-sm font-bold text-gray-500">
+            System Status: <span className="text-emerald-500 animate-pulse ml-1">● ONLINE</span>
           </h2>
-          <div className="text-sm font-mono text-brutal-gold border border-brutal-gold px-3 py-1 bg-brutal-bg">
+          <div className="text-xs font-bold text-academy-teal border-2 border-academy-gold rounded-full px-4 py-1.5 bg-yellow-50">
             ADMIN ACCESS
           </div>
         </header>
@@ -81,30 +83,33 @@ function App() {
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
 
           <div className="mb-8">
-            <h2 className="text-3xl font-black tracking-tight">System Overview</h2>
-            <p className="text-gray-400 mt-1 font-mono text-sm">Real-time database metrics</p>
+            <h2 className="text-3xl font-black tracking-tight text-academy-teal">System Overview</h2>
+            <p className="text-gray-500 mt-1 text-sm font-medium">Real-time database metrics & institutional health</p>
           </div>
 
           {/* Dynamic Data Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-            <div className="border border-brutal-border bg-brutal-card p-6">
-              <h3 className="text-gray-400 font-mono text-xs mb-2 uppercase tracking-widest">Total Students</h3>
-              <p className="text-4xl font-black text-brutal-gold">
+            {/* Metric Card 1 */}
+            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+              <h3 className="text-gray-400 font-bold text-xs mb-2 uppercase tracking-widest">Total Students</h3>
+              <p className="text-5xl font-black text-academy-teal">
                 {isLoading ? "..." : metrics.students}
               </p>
             </div>
 
-            <div className="border border-brutal-border bg-brutal-card p-6">
-              <h3 className="text-gray-400 font-mono text-xs mb-2 uppercase tracking-widest">Active Streams</h3>
-              <p className="text-4xl font-black text-brutal-gold">
+            {/* Metric Card 2 */}
+            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+              <h3 className="text-gray-400 font-bold text-xs mb-2 uppercase tracking-widest">Active Streams</h3>
+              <p className="text-5xl font-black text-academy-teal">
                 {isLoading ? "..." : metrics.streams}
               </p>
             </div>
 
-            <div className="border border-brutal-border bg-brutal-card p-6 opacity-50">
-              <h3 className="text-gray-400 font-mono text-xs mb-2 uppercase tracking-widest">Scores Logged</h3>
-              <p className="text-4xl font-black text-brutal-gold">
+            {/* Metric Card 3 */}
+            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] opacity-60">
+              <h3 className="text-gray-400 font-bold text-xs mb-2 uppercase tracking-widest">Scores Logged</h3>
+              <p className="text-5xl font-black text-academy-teal">
                 {isLoading ? "..." : metrics.scores}
               </p>
             </div>

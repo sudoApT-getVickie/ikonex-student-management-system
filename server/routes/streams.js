@@ -49,4 +49,30 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// DELETE A STREAM
+router.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Safety Check: Are there students in this stream?
+        const studentCheck = await pool.query("SELECT * FROM students WHERE stream_id = $1", [id]);
+        if (studentCheck.rows.length > 0) {
+            return res.status(400).json({
+                error: `Cannot delete stream: ${studentCheck.rows.length} student(s) are currently assigned to it. Reassign or remove them first.`
+            });
+        }
+
+        const deleteStream = await pool.query("DELETE FROM streams WHERE id = $1 RETURNING *", [id]);
+
+        if (deleteStream.rows.length === 0) {
+            return res.status(404).json({ error: "Stream not found" });
+        }
+
+        res.json({ message: "Class stream successfully deleted." });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error during stream deletion" });
+    }
+});
+
 module.exports = router;
