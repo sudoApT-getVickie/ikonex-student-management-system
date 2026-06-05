@@ -6,8 +6,20 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// cors and json body parsing stuff
-app.use(cors());
+// --- SECURE CORS CONFIGURATION ---
+//  tells the browser to only accept requests from your local machine or your live Vercel site.
+const corsOptions = {
+    origin: [
+        'http://localhost:5173',
+        'https://ikonex-student-management-system.vercel.app'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
+// apply the secure cors rules and json body parsing
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // just a quick route to make sure backend is actually running 
