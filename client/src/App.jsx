@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import brandLogo from './assets/logo.svg';
 
 function App() {
   // 1. Initialize State
@@ -42,11 +43,14 @@ function App() {
 
       {/* Sidebar Navigation */}
       <aside className="w-64 border-r border-brutal-border bg-brutal-card hidden md:flex flex-col">
-        <div className="p-6 border-b border-brutal-border">
-          <h1 className="text-2xl font-black tracking-tighter text-brutal-gold font-mono">
-            IKONEX<span className="text-white">_SMS</span>
-          </h1>
-          <p className="text-xs text-gray-400 mt-2 font-mono uppercase tracking-widest">Command Center</p>
+        <div className="p-6 border-b border-brutal-border flex items-center gap-3">
+          <img src={brandLogo} alt="Ikonex Academy Logo" className="w-8 h-8" />
+          <div>
+            <h1 className="text-xl font-black tracking-tighter text-brutal-gold font-mono leading-none">
+              IKONEX<span className="text-white">_SMS</span>
+            </h1>
+            <p className="text-[10px] text-gray-400 mt-1 font-mono uppercase tracking-widest">Command Center</p>
+          </div>
         </div>
 
         <nav className="flex-1 p-4 space-y-2 mt-4">

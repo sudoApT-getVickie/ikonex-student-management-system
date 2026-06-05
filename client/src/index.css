@@ -1,29 +1,36 @@
 @import "tailwindcss";
 
-/* Tailwind v4 CSS Theme Configuration Syntax */
+/* Tailwind v4 Clean Academy Theme */
 @theme {
-  --color-brutal-bg: #030712;
-  --color-brutal-card: #111827;
-  --color-brutal-gold: #facc15;
-  --color-brutal-border: #374151;
+  --color-academy-white: #FFFFFF;
+  --color-academy-teal: #022B3A;
+  --color-academy-green: #90EE90;
+  --color-academy-gold: #FFD700;
+  --color-academy-red: #F03A47;
 }
 
 body {
-  background-color: var(--color-brutal-bg);
-  color: #ffffff;
+  background-color: var(--color-academy-white);
+  color: var(--color-academy-teal);
 }
 
-/* Custom Monospace Scrollbar for tables */
+/* Custom Scrollbar for the light theme */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #030712;
+  background: #f3f4f6;
+  /* Light gray */
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #4b5563;
+  background: #d1d5db;
+  /* Medium gray */
   border-radius: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #facc15;
+  background: #90EE90;
+  /* Academy Green on hover */
 }
