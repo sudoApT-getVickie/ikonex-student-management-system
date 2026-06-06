@@ -43,6 +43,6 @@ app.use('/api/subjects', subjectRoutes);
 app.use('/api/scores', scoreRoutes);
 
 // start the server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is blasting off on port ${PORT}`);
 });
