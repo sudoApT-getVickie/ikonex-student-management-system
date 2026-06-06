@@ -42,7 +42,7 @@ export default function Landing() {
                     {/* Primary Hook */}
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 border border-gray-200 text-[11px] font-semibold text-academy-teal mb-4">
                         <span className="w-2 h-2 rounded-full bg-academy-teal"></span>
-                        50 students joined today
+                        Classes are in progress
                     </div>
 
                     <h1 className="text-4xl md:text-6xl font-black text-academy-teal tracking-tighter leading-tight mb-4">

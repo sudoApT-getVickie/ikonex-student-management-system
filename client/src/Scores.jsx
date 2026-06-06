@@ -7,6 +7,7 @@ export default function Scores() {
     const [scores, setScores] = useState([]);
     const [students, setStudents] = useState([]);
     const [subjects, setSubjects] = useState([]);
+    const [streams, setStreams] = useState([]);
 
     const [newScore, setNewScore] = useState({
         student_id: '',
@@ -14,6 +15,14 @@ export default function Scores() {
         exam_type: 'MID-TERM',
         marks: ''
     });
+
+    const [filterStreamId, setFilterStreamId] = useState('');
+
+    const [formStreamId, setFormStreamId] = useState('');
+
+    const formFilteredStudents = formStreamId
+        ? students.filter(s => s.stream_id === parseInt(formStreamId))
+        : students;
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -23,14 +32,16 @@ export default function Scores() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [scoresRes, studentsRes, subjectsRes] = await Promise.all([
+                const [scoresRes, studentsRes, subjectsRes, streamsRes] = await Promise.all([
                     axios.get(`${API_BASE}/api/scores`),
                     axios.get(`${API_BASE}/api/students`),
-                    axios.get(`${API_BASE}/api/subjects`)
+                    axios.get(`${API_BASE}/api/subjects`),
+                    axios.get(`${API_BASE}/api/streams`)
                 ]);
                 setScores(scoresRes.data);
                 setStudents(studentsRes.data);
                 setSubjects(subjectsRes.data);
+                setStreams(streamsRes.data);
             } catch (err) {
                 setError("Failed to connect to the database.");
             } finally {
@@ -85,6 +96,15 @@ export default function Scores() {
         return 'E';
     };
 
+    // --- NEW: CLIENT-SIDE FILTERING ENGINE ---
+    const filteredScores = filterStreamId
+        ? scores.filter(score => {
+            // Map the score back to the student to find their stream_id
+            const student = students.find(s => s.admission_number === score.admission_number);
+            return student && student.stream_id === parseInt(filterStreamId);
+        })
+        : scores;
+
     return (
         <div className="min-h-screen bg-gray-50 text-academy-teal font-sans flex">
 
@@ -116,7 +136,18 @@ export default function Scores() {
 
                 <header className="h-16 border-b border-gray-200 bg-white flex items-center px-8 justify-between shadow-sm">
                     <h2 className="text-sm font-bold text-gray-500">System Status: <span className="text-emerald-500 animate-pulse ml-1">● ONLINE</span></h2>
-                    <div className="text-xs font-bold text-academy-teal border-2 border-academy-gold rounded-full px-4 py-1.5 bg-yellow-50">ADMIN ACCESS</div>
+
+                    <Link
+                        to="/"
+                        className="px-6 py-2 bg-academy-gold text-academy-teal font-black tracking-widest uppercase border-2 border-academy-teal shadow-[3px_3px_0px_0px_#022B3A] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all duration-200 flex items-center gap-2 group text-xs cursor-pointer"
+                        title="Securely log out of the Command Center"
+                    >
+                        {/* Log Out Door Icon */}
+                        <svg className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Log Out
+                    </Link>
                 </header>
 
                 <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
@@ -136,6 +167,26 @@ export default function Scores() {
                                 {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-bold rounded-lg flex items-start gap-2"><span>⚠️</span> {error}</div>}
 
                                 <form onSubmit={handleSubmit} className="space-y-4">
+                                    {/* NEW: Cascading Gatekeeper Dropdown */}
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">1. Filter by Stream</label>
+                                        <select
+                                            value={formStreamId}
+                                            onChange={(e) => {
+                                                setFormStreamId(e.target.value);
+                                                // CRITICAL: Reset the student selection if the stream changes
+                                                setNewScore({ ...newScore, student_id: '' });
+                                            }}
+                                            className="w-full bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2.5 text-emerald-900 focus:outline-none focus:border-academy-gold text-sm font-bold"
+                                        >
+                                            <option value="">All Streams (Unfiltered)</option>
+                                            {streams.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                        </select>
+                                    </div>
+
+                                    {/* UPDATED: Dependent Student Dropdown */}
+
+
                                     <div>
                                         <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">Select Student</label>
                                         <select
@@ -197,9 +248,25 @@ export default function Scores() {
                         {/* Scores Roster Table */}
                         <div className="lg:col-span-2">
                             <div className="bg-white border border-gray-100 rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] overflow-hidden">
-                                <div className="p-5 border-b border-gray-100 bg-white flex justify-between items-center">
-                                    <h3 className="font-bold text-academy-teal">Academic Registry</h3>
-                                    <span className="text-xs font-bold bg-gray-100 text-gray-500 px-3 py-1 rounded-full">{scores.length} Entries</span>
+                                <div className="p-5 border-b border-gray-100 bg-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                    <div className="flex items-center gap-3">
+                                        <h3 className="font-bold text-academy-teal">Academic Registry</h3>
+                                        <span className="text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 px-3 py-1 rounded-full">
+                                            {filteredScores.length} Entries
+                                        </span>
+                                    </div>
+
+                                    {/* NEW: Filter Dropdown */}
+                                    <select
+                                        value={filterStreamId}
+                                        onChange={(e) => setFilterStreamId(e.target.value)}
+                                        className="w-full sm:w-auto bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-academy-teal focus:outline-none focus:border-academy-gold text-xs font-bold"
+                                    >
+                                        <option value="">All Class Streams (Unfiltered)</option>
+                                        {streams.map(stream => (
+                                            <option key={stream.id} value={stream.id}>{stream.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
 
                                 <div className="overflow-x-auto">
@@ -216,10 +283,10 @@ export default function Scores() {
                                         <tbody>
                                             {isLoading ? (
                                                 <tr><td colSpan="5" className="p-8 text-center text-gray-400 font-medium text-sm">Loading records...</td></tr>
-                                            ) : scores.length === 0 ? (
-                                                <tr><td colSpan="5" className="p-8 text-center text-gray-400 font-medium text-sm">No scores recorded.</td></tr>
+                                            ) : filteredScores.length === 0 ? (
+                                                <tr><td colSpan="5" className="p-8 text-center text-gray-400 font-medium text-sm">No records found for this selection.</td></tr>
                                             ) : (
-                                                scores.map((score) => (
+                                                filteredScores.map((score) => (
                                                     <tr key={score.id} className="border-b border-gray-50 hover:bg-emerald-50/30 transition-colors group">
                                                         <td className="p-4 pl-6">
                                                             <div className="font-black text-academy-teal">{score.last_name}, {score.first_name}</div>

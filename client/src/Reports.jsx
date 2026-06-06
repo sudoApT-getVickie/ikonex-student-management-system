@@ -13,8 +13,18 @@ export default function Reports() {
     const [selectedStudentId, setSelectedStudentId] = useState('');
     const [selectedStreamId, setSelectedStreamId] = useState('');
 
+    const [studentReportStreamId, setStudentReportStreamId] = useState('');
+
+    const reportFilteredStudents = studentReportStreamId
+        ? students.filter(s => s.stream_id === parseInt(studentReportStreamId))
+        : students;
+
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [previewModalOpen, setPreviewModalOpen] = useState(false);
+    const [pdfPreviewUrl, setPdfPreviewUrl] = useState('');
+    const [previewFilename, setPreviewFilename] = useState('');
 
     const API_BASE = import.meta.env.VITE_API_URL;
 
@@ -103,7 +113,12 @@ export default function Reports() {
         doc.text(`Average Score: ${average}%`, 14, finalY + 8);
         doc.text(`Overall Grade: ${getGrade(average)}`, 14, finalY + 16);
 
-        doc.save(`${student.admission_number}_Report_Card.pdf`);
+        const filename = `${student.admission_number}_Report_Card.pdf`;
+        const blobUrl = doc.output('bloburl'); // Converts PDF to a secure internal URL
+
+        setPdfPreviewUrl(blobUrl);
+        setPreviewFilename(filename);
+        setPreviewModalOpen(true);
     };
 
     // --- PDF GENERATION: CLASS STREAM RANKING ---
@@ -165,7 +180,12 @@ export default function Reports() {
             headStyles: { fillColor: [4, 120, 87] }
         });
 
-        doc.save(`${stream.name.replace(/\s+/g, '_')}_Performance_Report.pdf`);
+        const filename = `${stream.name.replace(/\s+/g, '_')}_Performance_Report.pdf`;
+        const blobUrl = doc.output('bloburl');
+
+        setPdfPreviewUrl(blobUrl);
+        setPreviewFilename(filename);
+        setPreviewModalOpen(true);
     };
 
     return (
@@ -194,10 +214,20 @@ export default function Reports() {
             </aside>
 
             <main className="flex-1 flex flex-col h-screen overflow-hidden">
-
                 <header className="h-16 border-b border-gray-200 bg-white flex items-center px-8 justify-between shadow-sm">
                     <h2 className="text-sm font-bold text-gray-500">System Status: <span className="text-emerald-500 animate-pulse ml-1">● ONLINE</span></h2>
-                    <div className="text-xs font-bold text-academy-teal border-2 border-academy-gold rounded-full px-4 py-1.5 bg-yellow-50">ADMIN ACCESS</div>
+
+                    <Link
+                        to="/"
+                        className="px-6 py-2 bg-academy-gold text-academy-teal font-black tracking-widest uppercase border-2 border-academy-teal shadow-[3px_3px_0px_0px_#022B3A] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all duration-200 flex items-center gap-2 group text-xs cursor-pointer"
+                        title="Securely log out of the Command Center"
+                    >
+                        {/* Log Out Door Icon */}
+                        <svg className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Log Out
+                    </Link>
                 </header>
 
                 <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
@@ -215,6 +245,22 @@ export default function Reports() {
                             <p className="text-sm text-gray-500 mb-6">Generates a detailed breakdown of a single student's academic performance across all subjects.</p>
 
                             <form onSubmit={generateStudentReport} className="space-y-4">
+
+                                {/* NEW: Filter by Stream Gatekeeper */}
+                                <select
+                                    value={studentReportStreamId}
+                                    onChange={(e) => {
+                                        setStudentReportStreamId(e.target.value);
+                                        // CRITICAL: Clear the student selection if the stream changes
+                                        setSelectedStudentId('');
+                                    }}
+                                    className="w-full bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-3 text-emerald-900 focus:outline-none focus:border-academy-gold text-sm font-bold"
+                                >
+                                    <option value="">All Streams (Unfiltered)</option>
+                                    {streams.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                </select>
+
+                                {/* UPDATED: Dependent Student Dropdown */}
                                 <select
                                     value={selectedStudentId}
                                     onChange={(e) => setSelectedStudentId(e.target.value)}
@@ -222,7 +268,9 @@ export default function Reports() {
                                     required
                                 >
                                     <option value="" disabled>Select a student...</option>
-                                    {students.map(s => <option key={s.id} value={s.id}>{s.admission_number} - {s.last_name}, {s.first_name}</option>)}
+                                    {reportFilteredStudents.map(s => (
+                                        <option key={s.id} value={s.id}>{s.admission_number} - {s.last_name}, {s.first_name}</option>
+                                    ))}
                                 </select>
 
                                 <button type="submit" className="w-full bg-academy-teal text-white font-bold tracking-wider py-3 rounded-lg hover:bg-emerald-800 transition-all shadow-md">
@@ -256,6 +304,50 @@ export default function Reports() {
                     </div>
                 </div>
             </main>
+            {/* --- PDF PREVIEW MODAL OVERLAY --- */}
+            {previewModalOpen && (
+                <div className="fixed inset-0 bg-academy-teal/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-8">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl h-full max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+
+                        {/* Modal Header */}
+                        <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                            <div>
+                                <h3 className="text-lg font-black text-academy-teal">Document Preview</h3>
+                                <p className="text-xs font-bold text-gray-500">{previewFilename}</p>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                <a
+                                    href={pdfPreviewUrl}
+                                    download={previewFilename}
+                                    className="bg-academy-gold text-academy-teal text-sm font-black px-6 py-2.5 rounded-lg hover:bg-yellow-400 transition-colors shadow-sm"
+                                >
+                                    Confirm & Download
+                                </a>
+                                <button
+                                    onClick={() => {
+                                        setPreviewModalOpen(false);
+                                        URL.revokeObjectURL(pdfPreviewUrl); // Prevents memory leaks
+                                    }}
+                                    className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 hover:bg-red-100 hover:text-red-600 transition-colors text-lg"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Modal Body (iFrame Render) */}
+                        <div className="flex-1 bg-gray-200/50 p-2 md:p-4">
+                            <iframe
+                                src={pdfPreviewUrl}
+                                className="w-full h-full rounded-xl border border-gray-200 shadow-inner bg-white"
+                                title="PDF Preview"
+                            />
+                        </div>
+
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

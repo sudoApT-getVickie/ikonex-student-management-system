@@ -144,10 +144,19 @@ export default function Students() {
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
 
         <header className="h-16 border-b border-gray-200 bg-white flex items-center px-8 justify-between shadow-sm">
-          <h2 className="text-sm font-bold text-gray-500">
-            System Status: <span className="text-emerald-500 animate-pulse ml-1">● ONLINE</span>
-          </h2>
-          <div className="text-xs font-bold text-academy-teal border-2 border-academy-gold rounded-full px-4 py-1.5 bg-yellow-50">ADMIN ACCESS</div>
+          <h2 className="text-sm font-bold text-gray-500">System Status: <span className="text-emerald-500 animate-pulse ml-1">● ONLINE</span></h2>
+
+          <Link
+            to="/"
+            className="px-6 py-2 bg-academy-gold text-academy-teal font-black tracking-widest uppercase border-2 border-academy-teal shadow-[3px_3px_0px_0px_#022B3A] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all duration-200 flex items-center gap-2 group text-xs cursor-pointer"
+            title="Securely log out of the Command Center"
+          >
+            {/* Log Out Door Icon */}
+            <svg className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            Log Out
+          </Link>
         </header>
 
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
