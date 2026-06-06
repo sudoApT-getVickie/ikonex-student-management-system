@@ -120,6 +120,12 @@ export default function Streams() {
                     <Link to="/subjects" className="block p-3 rounded-lg text-gray-500 font-semibold transition-all hover:text-academy-teal hover:bg-gray-50">
                         Academic Subjects
                     </Link>
+                    <Link to="/scores" className="block p-3 rounded-lg text-gray-500 font-semibold transition-all hover:text-academy-teal hover:bg-gray-50">
+                        Performance Logs
+                    </Link>
+                    <Link to="/reports" className="block p-3 rounded-lg text-gray-500 font-semibold transition-all hover:text-academy-teal hover:bg-gray-50">
+                        Print Center
+                    </Link>
                 </nav>
             </aside>
 

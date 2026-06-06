@@ -6,6 +6,8 @@ import Landing from './Landing.jsx'
 import Streams from './Streams.jsx'
 import Students from './Students.jsx'
 import Subjects from './Subjects.jsx'
+import Scores from './Scores.jsx'
+import Reports from './Reports.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -17,6 +19,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/streams" element={<Streams />} />
         <Route path="/students" element={<Students />} />
         <Route path="/subjects" element={<Subjects />} />
+        <Route path="/scores" element={<Scores />} />
+        <Route path="/reports" element={<Reports />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
