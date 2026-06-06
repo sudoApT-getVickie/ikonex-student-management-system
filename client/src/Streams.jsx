@@ -117,6 +117,9 @@ export default function Streams() {
                     <Link to="/students" className="block p-3 rounded-lg text-gray-500 font-semibold transition-all hover:text-academy-teal hover:bg-gray-50">
                         Students Roster
                     </Link>
+                    <Link to="/subjects" className="block p-3 rounded-lg text-gray-500 font-semibold transition-all hover:text-academy-teal hover:bg-gray-50">
+                        Academic Subjects
+                    </Link>
                 </nav>
             </aside>
 
