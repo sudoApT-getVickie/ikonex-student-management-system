@@ -19,7 +19,11 @@ The application is fully deployed and production-ready at [ikonex-student-manage
 * The frontend and backend architectures communicate entirely over secure cloud protocols.
 * In rare instances, strict corporate firewalls, local network DNS configurations, or strict browser privacy extensions (such as aggressive ad-blockers) may intercept client-side database handshakes.
 
-**Recommended Testing Environment:** For an uninterrupted evaluation, please access the live URL using a standard, un-firewalled network (MOBILE-DATA) or via an Incognito/Private window with extensions disabled.
+**Recommended Testing Environment:** For an uninterrupted evaluation, please access the live URL using a standard, un-firewalled network (MOBILE-DATA) or via an Incognito/Private window with extensions disabled. 
+
+https://github.com/user-attachments/assets/7046ea6a-919a-41da-8254-46021610a218
+
+
 
 ---
 
