@@ -3,7 +3,5 @@
     "axios": "^1.17.0",
     "pg": "^8.21.0"
   },
-  "scripts": {
-    "prepare": "husky"
-  }
+  "scripts": {}
 }
