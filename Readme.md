@@ -7,44 +7,55 @@ To provide a robust, web-based management solution that streamlines academic ope
 
 ## Tech Stack & Architecture
 This project utilizes a decoupled monorepo architecture:
-*   **Frontend:** React (Vite), Tailwind CSS
-*   **Backend:** Node.js, Express.js
-*   **Database:** PostgreSQL
-*   **Deployment Architecture:** Vercel (Client) & Railway (API & Database)
+* **Frontend:** React (Vite), Tailwind CSS
+* **Backend:** Node.js, Express.js
+* **Database:** PostgreSQL
+* **Deployment Architecture:** Vercel (Client) & Railway (API & Database)
+
+###  Production Testing Note
+The application is fully deployed and production-ready at [ikonex-student-management-system.vercel.app](https://ikonex-student-management-system.vercel.app/).
+
+**Network & Environment Compatibility:**
+* The frontend and backend architectures communicate entirely over secure cloud protocols.
+* In rare instances, strict corporate firewalls, local network DNS configurations, or strict browser privacy extensions (such as aggressive ad-blockers) may intercept client-side database handshakes.
+
+**Recommended Testing Environment:** For an uninterrupted evaluation, please access the live URL using a standard, un-firewalled network (MOBILE-DATA) or via an Incognito/Private window with extensions disabled.
+
+---
 
 ## Core Functional Modules
 
 ### 1. Cohort & Stream Management
-*   Initialize and manage class streams (e.g., Form 1A, Form 1B).
-*   Assign Class Teachers and view aggregated class performance dossiers.
+* Initialize and manage class streams (e.g., Form 1A, Form 1B).
+* Assign Class Teachers and view aggregated class performance dossiers.
 
 ### 2. Student Roster
-*   Register students and assign admission numbers.
-*   Allocate students to specific class streams.
-*   Full CRUD capabilities for student records.
+* Register students and assign admission numbers.
+* Allocate students to specific class streams.
+* Full CRUD capabilities for student records.
 
 ### 3. Curriculum & Subject Mapping
-*   Create academic subjects with unique identifier codes.
-*   Map specific subjects to class streams for targeted grading.
+* Create academic subjects with unique identifier codes.
+* Map specific subjects to class streams for targeted grading.
 
 ### 4. Assessment & Analytics Engine
-*   Record and update continuous assessment scores per student, per subject.
-*   Built-in validation to prevent duplicate score entries.
-*   Automated Results Processing: Calculates total marks, average scores, and assigns grades based on configurable scales.
-*   Algorithmic ranking for individual subject positions and overall stream rankings.
+* Record and update continuous assessment scores per student, per subject.
+* Built-in validation to prevent duplicate score entries.
+* Automated Results Processing: Calculates total marks, average scores, and assigns grades based on configurable scales.
+* Algorithmic ranking for individual subject positions and overall stream rankings.
 
 ### 5. Print Center (Reporting)
-*   Generate automated, downloadable PDF Report Cards for individual students.
-*   Compile and export PDF class performance reports.
+* Generate automated, downloadable PDF Report Cards for individual students.
+* Compile and export PDF class performance reports.
 
 ---
 
 ## Setup & Local Development Guide
 
 ### Prerequisites
-*   Node.js (v18+)
-*   PostgreSQL running locally or via a cloud provider.
-*   Git
+* Node.js (v18+)
+* PostgreSQL running locally or via a cloud provider.
+* Git
 
 ### 1. Clone the Repository
 \`\`\`bash
